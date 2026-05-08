@@ -1,0 +1,23 @@
+{
+  "name": "javascript-data-structures",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A workspace for implementing and testing data structures in JavaScript.",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
+  },
+  "keywords": [
+    "javascript",
+    "data-structures",
+    "algorithms"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

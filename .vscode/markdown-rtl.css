@@ -1,0 +1,15 @@
+/* Force right-to-left layout in Markdown Preview for Arabic docs. */
+.markdown-body,
+body.vscode-body {
+    direction: rtl;
+    text-align: left;
+}
+
+/* Keep code blocks readable in left-to-right direction. */
+.markdown-body pre,
+.markdown-body code,
+body.vscode-body pre,
+body.vscode-body code {
+    direction: ltr;
+    text-align: left;
+}
