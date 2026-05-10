@@ -61,7 +61,7 @@ console.log(`\n${adapterFileBanner}------ Next Block: WeatherAdapter ------${ada
 // With adapter - clean and consistent
 console.log(`${adapterSectionBanner}Example 2 (Good): Adapter-based access${adapterReset}`);
 class WeatherAdapter implements WeatherApp {
-    constructor (private readonly weatherAPI: WeatherAPI) { }
+    constructor(private readonly weatherAPI: WeatherAPI) { }
 
     getTempF(): number {
         return this.weatherAPI.getTempC() * 9 / 5 + 32;
@@ -89,5 +89,51 @@ if (appWeather.getTempF() > 75) {
 if (appWeather.getWindSpeedMPH() > 10) {
     console.log("[Adapter] It's windy!");
 }
+
+console.log(`\n${adapterFileBanner}------ Next Block: Phone Charger Adapter ------${adapterReset}\n`);
+
+console.log(`${adapterSectionBanner}Example 3 (Good): Lightning → MicroUSB Adapter${adapterReset}`);
+
+interface IPhone {
+    useLightning(): void;
+}
+
+interface IAndroid {
+    useMicroUSB(): void;
+}
+
+class IPhone7 implements IPhone {
+    public useLightning(): void {
+        console.log('Using lightning port..');
+    }
+}
+
+class GooglePixel implements IAndroid {
+    public useMicroUSB(): void {
+        console.log('Using micro USB...');
+    }
+}
+
+class LightningToMicroUSBAdapter implements IAndroid {
+    private readonly iphoneDevice: IPhone;
+
+    constructor(iphone: IPhone) {
+        this.iphoneDevice = iphone;
+    }
+
+    public useMicroUSB(): void {
+        console.log('Want to use micro USB, converting to Lightning....');
+        this.iphoneDevice.useLightning();
+    }
+}
+
+const nativeAndroid: IAndroid = new GooglePixel();
+console.log('Native Android device:');
+nativeAndroid.useMicroUSB();
+
+const iphone = new IPhone7();
+const chargeAdapter = new LightningToMicroUSBAdapter(iphone);
+console.log('iPhone with adapter:');
+chargeAdapter.useMicroUSB();
 
 console.log(`${adapterFileBanner}========= END FILE: adapter.ts =========${adapterReset}\n`);

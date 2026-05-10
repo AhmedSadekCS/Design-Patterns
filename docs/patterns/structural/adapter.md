@@ -186,3 +186,63 @@ notificationService.send("Welcome!");
 مفيد جدًا مع APIs و third-party libraries وأي بيانات جاية بشكل مختلف.
 
 استخدمه لما يكون فيه اختلاف حقيقي في الشكل أو الـ interface، ومتبالغش فيه لو التحويل غير ضروري.
+
+---
+
+## Example: Phone Charger Adapter (Lightning → MicroUSB)
+
+### Class Relationships
+
+```mermaid
+classDiagram
+    class IPhone {
+        <<interface>>
+        +useLightning() void
+    }
+
+    class IAndroid {
+        <<interface>>
+        +useMicroUSB() void
+    }
+
+    class IPhone7 {
+        +useLightning() void
+    }
+
+    class GooglePixel {
+        +useMicroUSB() void
+    }
+
+    class LightningToMicroUSBAdapter {
+        -iphoneDevice: IPhone
+        +useMicroUSB() void
+    }
+
+    IPhone  <|.. IPhone7
+    IAndroid <|.. GooglePixel
+    IAndroid <|.. LightningToMicroUSBAdapter
+    LightningToMicroUSBAdapter --> IPhone : wraps
+```
+
+Key points:
+
+- `IPhone7` and `GooglePixel` are **incompatible** — they implement different interfaces.
+- `LightningToMicroUSBAdapter` **implements `IAndroid`** so it can be used anywhere an Android device is expected.
+- It also **holds a reference to `IPhone`** — that's the object being adapted.
+- The client only ever talks to `IAndroid`; it never knows a Lightning port is involved.
+
+### How the Call Flows
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Adapter as LightningToMicroUSBAdapter
+    participant iPhone as IPhone7
+
+    Client->>Adapter: useMicroUSB()
+    Note over Adapter: "Want to use micro USB,<br/>converting to Lightning...."
+    Adapter->>iPhone: useLightning()
+    Note over iPhone: "Using lightning port.."
+```
+
+The adapter **translates** the `useMicroUSB()` call into a `useLightning()` call — the client and the iPhone never speak directly.

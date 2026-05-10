@@ -41,6 +41,9 @@ Pattern files:
 
 - [Adapter](docs/patterns/structural/adapter.md)
 - [Facade](docs/patterns/structural/facade.md)
+- [Decorator](docs/patterns/structural/decorator.md)
+- [Composite](docs/patterns/structural/composite.md)
+- [Proxy](docs/patterns/structural/proxy.md)
 
 ### Adapter
 
@@ -50,6 +53,18 @@ All Adapter details and examples are in [docs/patterns/structural/adapter.md](do
 
 All Facade details and examples are in [docs/patterns/structural/facade.md](docs/patterns/structural/facade.md).
 
+### Decorator
+
+All Decorator details and examples are in [docs/patterns/structural/decorator.md](docs/patterns/structural/decorator.md).
+
+### Composite
+
+All Composite details and examples are in [docs/patterns/structural/composite.md](docs/patterns/structural/composite.md).
+
+### Proxy
+
+All Proxy details and examples are in [docs/patterns/structural/proxy.md](docs/patterns/structural/proxy.md).
+
 ## Behavioral Patterns
 
 Handle communication between objects - how they interact and distribute responsibility.
@@ -58,6 +73,8 @@ Pattern files:
 
 - [Strategy](docs/patterns/behavioral/strategy.md)
 - [Observer](docs/patterns/behavioral/observer.md)
+- [Command](docs/patterns/behavioral/command.md)
+- [State](docs/patterns/behavioral/state.md)
 
 ### Strategy
 
@@ -66,6 +83,14 @@ All Strategy details and examples are in [docs/patterns/behavioral/strategy.md](
 ### Observer
 
 All Observer details and examples are in [docs/patterns/behavioral/observer.md](docs/patterns/behavioral/observer.md).
+
+### Command
+
+All Command details and examples are in [docs/patterns/behavioral/command.md](docs/patterns/behavioral/command.md).
+
+### State
+
+All State details and examples are in [docs/patterns/behavioral/state.md](docs/patterns/behavioral/state.md).
 
 ## Mental Model (Arabic Quick Guide)
 
@@ -236,6 +261,127 @@ form.valueChanges.subscribe(value => {});
 **الجملة الذهبية:**
 "لما يحصل كذا، عايز ناس تانية تعرف."
 
+### 8) Decorator
+
+**الصورة في دماغك:** طبقات إضافية على الكائن
+
+تخيل قهوة:
+- قهوة عادية
+- قهوة + حليب
+- قهوة + حليب + كاراميل
+- قهوة + حليب + كاراميل + شوكولاتة
+
+كل واحد بيلف حول اللي قبله.
+
+Base object -> add feature -> add feature -> final wrapped object
+
+**احفظها كده:**
+Decorator = إضافة ميزات ديناميكية بدون تعديل الكود الأساسي
+
+**مثال تحفظه:**
+
+```js
+let coffee = new SimpleCoffee();
+coffee = new MilkDecorator(coffee);
+coffee = new SugarDecorator(coffee);
+```
+
+**الجملة الذهبية:**
+"عايز أضيف ميزات اختيارية بدون أعمل subclass لكل combination."
+
+### 9) Composite
+
+**الصورة في دماغك:** شجرة فايل
+
+تخيل folder يحتوي على files وfolders تانية.
+بتعاملهم بنفس الطريقة.
+
+File: leaf node
+Folder: composite node
+Both implement same interface
+
+**احفظها كده:**
+Composite = معاملة موحدة للفروع والأوراق
+
+**مثال تحفظه:**
+
+```js
+root.add(new File("file.txt"));
+root.add(new Folder("subfolder"));
+root.display(); // يعرض الكل recursively
+```
+
+**الجملة الذهبية:**
+"عندي شجرة وبدي أتعامل مع كل العقد بنفس الطريقة."
+
+### 10) Proxy
+
+**الصورة في دماغك:** حارس الموارد الغالية
+
+تخيل door keeper.
+بدل ما تدخل مباشرة (غالي)، الحارس يتحكم.
+
+Client -> Proxy -> Real Object (lazy load / access control)
+
+**احفظها كده:**
+Proxy = وكيل يتحكم في الوصول للموارد
+
+**مثال تحفظه:**
+
+```js
+const image = new ImageProxy("photo.jpg"); // ما حمّش
+image.display(); // الآن يحمّل لما تحتاج
+```
+
+**الجملة الذهبية:**
+"الموارد غالية جدًا، حط وكيل يتحكم في الوصول."
+
+### 11) Command
+
+**الصورة في دماغك:** جزّ التنفيذ عن الطلب
+
+تخيل remote control.
+كل button بيمثل command.
+ممكن تأجل التنفيذ أو تلغيه أو تكرره.
+
+Request -> Command Object -> Execute -> Undo
+
+**احفظها كده:**
+Command = حوّل الطلبات لـ objects قابلة للتحكم
+
+**مثال تحفظه:**
+
+```js
+remote.pressButton(new PlayCommand(tv));
+remote.undo(); // اللي بدلتش
+```
+
+**الجملة الذهبية:**
+"عايز undo/redo أو queueing، حوّل الطلب لـ object."
+
+### 12) State
+
+**الصورة في دماغك:** سلوك يتغير حسب الحالة
+
+تخيل traffic light.
+لما يكون RED، بتوقف.
+لما يكون GREEN، بتمشي.
+
+State determines behavior
+
+**احفظها كده:**
+State = سلوك مختلف حسب حالة الكائن
+
+**مثال تحفظه:**
+
+```js
+player.setState(new PlayingState());
+player.setState(new PausedState());
+```
+
+**الجملة الذهبية:**
+"الكائن بيتصرف مختلف حسب الحالة، فصل الحالات لـ classes."
+
 ## جدول الحفظ السريع
 
 | Pattern | احفظها بصورة | معناها في كلمة |
@@ -245,14 +391,14 @@ form.valueChanges.subscribe(value => {});
 | Factory | مصنع | إنشاء حسب النوع |
 | Facade | زرار واحد | إخفاء التعقيد |
 | Adapter | مشترك كهرباء | تحويل وتوافق |
+| Decorator | طبقات قهوة | إضافة ميزات ديناميكية |
+| Composite | شجرة فايلات | معاملة موحدة للفروع والأوراق |
+| Proxy | حارس الموارد | وكيل للوصول |
 | Strategy | طرق للشغل | بدائل لنفس الهدف |
 | Observer | جرس تنبيه | إشعار عند حدوث تغيير |
-
-## أقوى طريقة تحفظهم
-
-احفظ الجملة دي:
-
-"واحد، ابني، اصنع، بسّط، حوّل، اختار، بلّغ"
+| Command | جهاز تحكم | طلبات كـ objects |
+| State | إشارة مرور | سلوك حسب الحالة |
+لف، مثقب، وكيل، اختار، بلّغ، طلب، غيّر"
 
 ومعناها:
 - Singleton = واحد
@@ -260,7 +406,19 @@ form.valueChanges.subscribe(value => {});
 - Factory = اصنع
 - Facade = بسّط
 - Adapter = حوّل
+- Decorator = لف (طبقات)
+- Composite = مثقب (tree)
+- Proxy = وكيل
 - Strategy = اختار
+- Observer = بلّغ
+- Command = طلب
+- State = غيّر
+
+أو إختصار سريع:
+
+"واحد، ابني، اصنع، بسّط، حوّل" (الـ 5 الأساسيين)
++ "لف، مثقب، وكيل" (الـ Structural الإضافيين)
++ "اختار، بلّغ، طلب، غيّر" (الـ Behavioral)
 - Observer = بلّغ
 
 دي أهم mnemonic:
@@ -323,6 +481,46 @@ bankTransferPayment.pay();
 orderCompleted$.subscribe(...);
 ```
 
+**Decorator**
+- شحنة + تأمين + gift wrap
+
+```js
+let order = new SimpleOrder();
+order = new InsuranceDecorator(order);
+order = new GiftWrapDecorator(order);
+```
+
+**Composite**
+- طلب يحتوي على items و sub-orders
+
+```js
+mainOrder.add(item);
+mainOrder.add(subOrder);
+mainOrder.display();
+```
+
+**Proxy**
+- lazy load الصور الكبيرة
+
+```js
+const image = new ImageProxy("product.jpg");
+```
+
+**Command**
+- كل عملية checkout بـ command قابلة للـ undo
+
+```js
+checkout.execute(new ProcessPaymentCommand());
+checkout.undo();
+```
+
+**State**
+- الطلب له states: pending -> processing -> shipped
+
+```js
+order.setState(new ProcessingState());
+```
+
 ## لو عايز تختار بينهم بسرعة
 
 اسأل نفسك السؤال ده:
@@ -341,6 +539,16 @@ Adapter
 Strategy
 7. هل عندك حدث وعايز تبلغ المهتمين؟
 Observer
+8. هل عايز تضيف ميزات اختيارية بدون تعديل الكود الأساسي؟
+Decorator
+9. هل عندك شجرة (tree) بدك معاملة موحدة للفروع والأوراق؟
+Composite
+10. هل عندك موارد غالية وتريد lazy loading أو access control؟
+Proxy
+11. هل عايز undo/redo أو تأجيل التنفيذ؟
+Command
+12. هل الكائن بيتصرف مختلف حسب حالته الداخلية؟
+State
 
 احفظهم بالشكل ده:
 
@@ -349,7 +557,12 @@ Builder -> الطباخ
 Factory -> المصنع
 Facade -> الريسبشن
 Adapter -> المحوّل
+Decorator -> صباغ الطبقات
+Composite -> بناء الشجرة
+Proxy -> الحارس
 Strategy -> الخطة
 Observer -> الجرس
+Command -> الجهاز الكهربائي
+State -> حالتك النفسية
 
 دي كده شبه خريطة ذهنية. لما تشوف الكود، الصورة هتطلع في دماغك بسرعة.
